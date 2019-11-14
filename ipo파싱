@@ -1,0 +1,7 @@
+## 페이지 바꾸면서 파싱, tbody로
+
+url = 'http://www.38.co.kr/html/fund/index.htm?o=nw&page=3'
+html = requests.get(url)
+
+
+soup = btfs(html.text, 'lxml')
