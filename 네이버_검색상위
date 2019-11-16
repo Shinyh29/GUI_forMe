@@ -1,0 +1,7 @@
+import pandas as pd
+url = 'https://finance.naver.com/sise/lastsearch2.nhn'
+import requests
+sht1 = pd.read_html(url, encoding='euc-kr')[1]
+sht1.to_excel('C:\\naver_searchstock.xlsx')
+print(pd.read_html(url, encoding='euc-kr')[1])
+# 인코딩한글 깨지면  https://financedata.github.io/posts/faq_crawling_data_encoding.html
