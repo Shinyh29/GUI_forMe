@@ -44,18 +44,16 @@ class MyApp(QWidget):
         if search_word:
             self.lbl.setText('BBC Search Results for "' + search_word + '"')
             self.tb.clear()
-            ################################# url_search 를 네이버에 맡게 바꾸고 파싱 ㄱㄱ
-            url_search = 'https://www.bbc.co.uk/search?q='
-            url = url_search + search_word
+            url_search = 'https://www.google.com/search?q='
+            url = url_search + search_word + '&ie=UTF-8'
             r = requests.get(url)
             html = r.content
             soup = BeautifulSoup(html, 'html.parser')
-            titles_html = soup.select('.search-results > li > article > div > h1 > a')
-
+            titles_html = soup.select('.LC20lb DKV0Md')
+            # rso > div:nth-child(2) > div > div:nth-child(1) > div > div.r > a > h3
+            self.tb.append(f'{len(titles_html)}________개 의 text')
             for i in range(len(titles_html)):
-                title = titles_html[i].text
-                link = titles_html[i].get('href')
-                self.tb.append(str(i+1) + '. ' + title + ' (' + '<a href="' + link + '">Link</a>' + ')')
+                self.tb.append(str(i+1) + titles_html[i].text )
 
 
 if __name__ == '__main__':
