@@ -42,19 +42,19 @@ class MyApp(QWidget):
         search_word = self.le.text()
 
         if search_word:
-            self.lbl.setText('BBC Search Results for "' + search_word + '"')
+            self.lbl.setText('Google : 검색 "' + search_word + '"')
             self.tb.clear()
             url_search = 'https://www.google.com/search?q='
             url = url_search + search_word + '&ie=UTF-8'
             r = requests.get(url)
             html = r.content
-            soup = BeautifulSoup(html, 'html.parser')
-            titles_html = soup.select('.LC20lb DKV0Md')
+            soup = BeautifulSoup(html, 'lxml')
+            titles_html = soup.select('a')
             # rso > div:nth-child(2) > div > div:nth-child(1) > div > div.r > a > h3
             self.tb.append(f'{len(titles_html)}________개 의 text')
-            for i in range(len(titles_html)):
-                self.tb.append(str(i+1) + titles_html[i].text )
-
+            for i in range(18,38,1):
+                self.tb.append(f'{str(i+1)} :    {titles_html[i].text}' )
+                self.tb.append(titles_html[i].get('href'))
 
 if __name__ == '__main__':
 
