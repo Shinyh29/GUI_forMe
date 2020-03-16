@@ -2,8 +2,14 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QLabel, QTextBrowser, QGridLayout
 import requests
 from bs4 import BeautifulSoup
+import pandas as pd
+from pymongo import MongoClient
+client = MongoClient('mongodb://shinyh30:1411@54.180.101.132:27017')
+db = client.excels
+import datetime
+date_time_str = '2020-03-11'
 ## http://codetorial.net/pyqt5/widget/qtextbrowser_advanced.html
-
+date_time_obj = datetime.datetime.strptime(date_time_str, '%Y-%m-%d')
 class MyApp(QWidget):
 
     def __init__(self):
@@ -42,19 +48,24 @@ class MyApp(QWidget):
         search_word = self.le.text()
 
         if search_word:
-            self.lbl.setText('Google : 검색 "' + search_word + '"')
+            self.lbl.setText('Naver 테마 검색 "' + search_word + '"')
             self.tb.clear()
-            url_search = 'https://www.google.com/search?q='
+            url_search = 'https://finance.naver.com/sise/theme.nhn?&page='
             url = url_search + search_word + '&ie=UTF-8'
             r = requests.get(url)
             html = r.content
             soup = BeautifulSoup(html, 'lxml')
-            titles_html = soup.select('a')
+            titles_html =  soup.select('td.col_type1 > a')
             # rso > div:nth-child(2) > div > div:nth-child(1) > div > div.r > a > h3
-            self.tb.append(f'{len(titles_html)}________개 의 text')
-            for i in range(18,38,1):
+            self.tb.append(f'{len(titles_html)}________개 의 THEMA')
+            for i in range(0,len(titles_html),1):
                 self.tb.append(f'{str(i+1)} :    {titles_html[i].text}' )
-                self.tb.append(titles_html[i].get('href'))
+                self.tb.append("https://finance.naver.com/"+ titles_html[i].get('href'))
+
+#contentarea_left > table.type_1.theme > tbody > tr:nth-child(4)
+
+
+
 
 if __name__ == '__main__':
 
